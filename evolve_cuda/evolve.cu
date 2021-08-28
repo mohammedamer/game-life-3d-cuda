@@ -51,7 +51,7 @@ int should_live(int is_alive, int alive_count){
 }
 
 __global__
-void evolve_kernel(int n, int *cell_arr, int *out_arr)
+void evolve_kernel(int *cell_arr, int *out_arr, int n)
 {
   int num_elem = n*n*n;
 
@@ -99,7 +99,7 @@ void evolve_kernel(int n, int *cell_arr, int *out_arr)
 
 }
 
-void evolve(int n, int *cell_arr, int *out_arr)
+void evolve(int *cell_arr, int *out_arr, int n)
 {
   
   int *_in, *_out;
@@ -114,7 +114,7 @@ void evolve(int n, int *cell_arr, int *out_arr)
     _in[i] = cell_arr[i];
   }
 
-  evolve_kernel<<<16,256>>>(n, _in, _out);
+  evolve_kernel<<<16,256>>>(_in, _out, n);
 
   cudaDeviceSynchronize();
 

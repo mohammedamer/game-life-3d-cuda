@@ -1,2 +1,15 @@
 *.so
 *.o
+**/.DS_Store
+**/.ipynb_checkpoints
+**/__pycache__
+**/.cache
+**/*.swp
+**/.eggs
+**/*.egg-info
+.ipython/
+.jupyter/
+.local/
+.rstudio/
+**/.idea
+

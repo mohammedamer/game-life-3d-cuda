@@ -1,1 +1,1 @@
-void evolve(int n, int *cell_arr, int *out_arr);
+void evolve(int *cell_arr, int *out_arr, int n);

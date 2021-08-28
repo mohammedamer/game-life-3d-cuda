@@ -657,7 +657,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #define __PYX_HAVE__pyevolve
 #define __PYX_HAVE_API__pyevolve
 /* Early includes */
-#include "./evolve.h"
+#include "evolve.h"
 #include "pythread.h"
 #include <string.h>
 #include <stdlib.h>
@@ -2058,10 +2058,10 @@ static PyObject *__pyx_codeobj__27;
 /* Late includes */
 
 /* "pyevolve.pyx":6
- *     void evolve(int n, int *cell_arr, int *out_arr)
+ *     void evolve(int *cell_arr, int *out_arr, int n)
  * 
  * def pyevolve(int[::1] cell_arr, int[::1] out_arr, int n):             # <<<<<<<<<<<<<<
- *     evolve(n, &cell_arr[0], &out_arr[0])
+ *     evolve(&cell_arr[0], &out_arr[0], n)
  */
 
 /* Python wrapper */
@@ -2154,7 +2154,7 @@ static PyObject *__pyx_pf_8pyevolve_pyevolve(CYTHON_UNUSED PyObject *__pyx_self,
   /* "pyevolve.pyx":7
  * 
  * def pyevolve(int[::1] cell_arr, int[::1] out_arr, int n):
- *     evolve(n, &cell_arr[0], &out_arr[0])             # <<<<<<<<<<<<<<
+ *     evolve(&cell_arr[0], &out_arr[0], n)             # <<<<<<<<<<<<<<
  */
   __pyx_t_1 = 0;
   __pyx_t_2 = -1;
@@ -2176,13 +2176,13 @@ static PyObject *__pyx_pf_8pyevolve_pyevolve(CYTHON_UNUSED PyObject *__pyx_self,
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
     __PYX_ERR(0, 7, __pyx_L1_error)
   }
-  evolve(__pyx_v_n, (&(*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_cell_arr.data) + __pyx_t_1)) )))), (&(*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_out_arr.data) + __pyx_t_3)) )))));
+  evolve((&(*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_cell_arr.data) + __pyx_t_1)) )))), (&(*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_out_arr.data) + __pyx_t_3)) )))), __pyx_v_n);
 
   /* "pyevolve.pyx":6
- *     void evolve(int n, int *cell_arr, int *out_arr)
+ *     void evolve(int *cell_arr, int *out_arr, int n)
  * 
  * def pyevolve(int[::1] cell_arr, int[::1] out_arr, int n):             # <<<<<<<<<<<<<<
- *     evolve(n, &cell_arr[0], &out_arr[0])
+ *     evolve(&cell_arr[0], &out_arr[0], n)
  */
 
   /* function exit code */
@@ -16282,10 +16282,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "pyevolve.pyx":6
- *     void evolve(int n, int *cell_arr, int *out_arr)
+ *     void evolve(int *cell_arr, int *out_arr, int n)
  * 
  * def pyevolve(int[::1] cell_arr, int[::1] out_arr, int n):             # <<<<<<<<<<<<<<
- *     evolve(n, &cell_arr[0], &out_arr[0])
+ *     evolve(&cell_arr[0], &out_arr[0], n)
  */
   __pyx_tuple__19 = PyTuple_Pack(3, __pyx_n_s_cell_arr, __pyx_n_s_out_arr, __pyx_n_s_n); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__19);
@@ -16702,10 +16702,10 @@ if (!__Pyx_RefNanny) {
   #endif
 
   /* "pyevolve.pyx":6
- *     void evolve(int n, int *cell_arr, int *out_arr)
+ *     void evolve(int *cell_arr, int *out_arr, int n)
  * 
  * def pyevolve(int[::1] cell_arr, int[::1] out_arr, int n):             # <<<<<<<<<<<<<<
- *     evolve(n, &cell_arr[0], &out_arr[0])
+ *     evolve(&cell_arr[0], &out_arr[0], n)
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8pyevolve_1pyevolve, NULL, __pyx_n_s_pyevolve); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -16715,7 +16715,7 @@ if (!__Pyx_RefNanny) {
   /* "pyevolve.pyx":1
  * # distutils: language=c++             # <<<<<<<<<<<<<<
  * 
- * cdef extern from "./evolve.h":
+ * cdef extern from "evolve.h":
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
