@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# CFLAGS="-I./"  \
-# LDFLAGS="-L./"     \
+make
 python setup.py build_ext -i
+cp *.so ../

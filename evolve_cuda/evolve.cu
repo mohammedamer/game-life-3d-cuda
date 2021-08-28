@@ -1,46 +1,128 @@
-// #include <iostream>
-// #include <math.h>
+#include <iostream>
+#include <math.h>
 
-int get_number(float num)
-{
-  return num*5;
+struct index {
+  int x;
+  int y;
+  int z;
+};
+
+__device__
+struct index unravel_idx(int idx, int n){
+
+  struct index unravel;
+
+  int x, y, z;
+
+  x = idx / (n*n);
+  y = (idx / n) % n;
+  z = idx % n;
+
+  unravel = {.x = x, .y = y, .z = z};
+
+  return unravel;
+
+} 
+
+__device__
+int ravel_idx(struct index idx, int n){
+  return idx.x+n*(idx.y + (idx.z*n));
 }
 
-// // function to add the elements of two arrays
-// __global__
-// void evolve_kernel(int n, float *x, float *y)
-// {
-//   for (int i = 0; i < n; i++)
-//       y[i] = x[i] + y[i];
-// }
+__device__
+int should_live(int is_alive, int alive_count){
 
-// void evolve(int n, float *x, float *y)
-// {
+  if (is_alive == 1){
+
+    if (alive_count < 4 || alive_count > 5){
+      return 0;
+    }
+
+  } else{
+
+    if (alive_count == 5){
+      return 1;
+    }
+
+  }
+
+  return is_alive;
+
+}
+
+__global__
+void evolve_kernel(int n, int *cell_arr, int *out_arr)
+{
+  int num_elem = n*n*n;
+
+  int current_idx = blockIdx.x*blockDim.x+threadIdx.x;
+
+  for (int idx=current_idx;
+    idx<num_elem; 
+    idx+=blockDim.x*gridDim.x){
+
+      struct index idx_3d = unravel_idx(idx, n);
+
+      int alive_count = 0;
+
+      int adj_x[] = {idx_3d.x-1, idx_3d.x, idx_3d.x+1};
+
+      int adj_y[] = {idx_3d.y-1, idx_3d.y, idx_3d.y+1};
+
+      int adj_z[] = {idx_3d.z-1, idx_3d.z, idx_3d.z+1};
+
+      for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+          for (int k=0; k<3; k++){
+
+            struct index _idx;
+
+            _idx.x = adj_x[i];
+            _idx.y = adj_y[j];
+            _idx.z = adj_z[k];
+
+            int adj_idx = ravel_idx(_idx, n);
+
+            if (adj_idx != idx && adj_idx > 0 && adj_idx < num_elem ){
+              alive_count+=cell_arr[adj_idx];
+            } 
+
+          }
+        }
+      }
+
+      int is_alive = cell_arr[current_idx];
+
+      out_arr[current_idx] = should_live(is_alive, alive_count);
+
+    }
+
+}
+
+void evolve(int n, int *cell_arr, int *out_arr)
+{
   
-//   float *_x, *_y;
+  int *_in, *_out;
+  int num_elem;
 
-//   cudaMallocManaged(&x, n*sizeof(float));
-//   cudaMallocManaged(&y, n*sizeof(float));
+  num_elem = n*n*n;
 
-//   // initialize x and y arrays on the host
-//   for (int i = 0; i < N; i++) {
-//     x[i] = 1.0f;
-//     y[i] = 2.0f;
-//   }
+  cudaMallocManaged(&_in, num_elem*sizeof(float));
+  cudaMallocManaged(&_out, num_elem*sizeof(float));
 
-//   evolve_kernel<<<1,1>>>(N, x, y);
+  for (int i = 0; i < num_elem; i++) {
+    _in[i] = cell_arr[i];
+  }
 
-//   cudaDeviceSynchronize();
+  evolve_kernel<<<16,256>>>(n, _in, _out);
 
-//   // Check for errors (all values should be 3.0f)
-//   float maxError = 0.0f;
-//   for (int i = 0; i < N; i++)
-//     maxError = fmax(maxError, fabs(y[i]-3.0f));
-//   std::cout << "Max error: " << maxError << std::endl;
+  cudaDeviceSynchronize();
 
-//   // Free memory
-//   cudaFree(x);
-//   cudaFree(y);
+  cudaFree(_in);
 
-//   return 0;
-// }
+  for (int i = 0; i < num_elem; i++) {
+    out_arr[i] = _out[i];
+  }
+
+  cudaFree(_out);
+}

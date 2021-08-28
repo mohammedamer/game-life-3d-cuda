@@ -1,1 +1,1 @@
-int get_number(float num);
+void evolve(int n, int *cell_arr, int *out_arr);
