@@ -50,7 +50,7 @@ def init_cubes(cubes_per_dim):
 
                 cube = Entity(model='cube', position=(x+0.5,y+0.5,z+0.5), 
                 color=color.orange, texture='white_cube', shader=lit_with_shadows_shader)
-                cube.visible = False
+                cube.enabled = False
                 z_row.append(cube)
 
             y_row.append(z_row)
@@ -83,9 +83,9 @@ def seed_cubes(cubes):
 
     for cube, _ in iterate_cubes(cubes):
 
-        visible = np.random.rand() < 0.2
+        enabled = np.random.rand() < 0.2
 
-        cube.visible = visible
+        cube.enabled = enabled
 
 
 def evolve(cubes):

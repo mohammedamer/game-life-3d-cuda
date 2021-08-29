@@ -7,7 +7,7 @@ ext_modules = [
               include_dirs=['.'],
               library_dirs=['.'],
               runtime_library_dirs=['.'],
-              libraries=["evolve"]  # Unix-like specific
+              libraries=["evolve"]
               )
 ]
 

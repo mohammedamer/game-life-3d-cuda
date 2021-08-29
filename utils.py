@@ -2,7 +2,7 @@ import itertools
 
 import numpy as np
 
-CUBES_PER_DIM = 10
+CUBES_PER_DIM = 30
 
 # python implemention of the same functionality in CUDA
 
@@ -71,7 +71,7 @@ def get_cubes_alive_arr(cubes):
             
             z_arr = []
             for k, cube in enumerate(z_row):
-                z_arr.append(1 if cube.visible else 0)
+                z_arr.append(1 if cube.enabled else 0)
 
             y_arr.append(z_arr)
 
@@ -82,4 +82,4 @@ def get_cubes_alive_arr(cubes):
 def update_cubes_alive_arr(cubes, alive_arr):
 
     for cube, (i, j, k) in iterate_cubes(cubes):
-        cube.visible = alive_arr[i,j,k] == 1
+        cube.enabled = alive_arr[i,j,k] == 1
