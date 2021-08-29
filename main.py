@@ -2,12 +2,10 @@ import itertools
 
 import numpy as np
 
-from ursina import Ursina, texture
-from ursina import color
+from ursina import Ursina
 from ursina import Entity
 from ursina import camera
 from ursina import window
-from ursina.shaders import lit_with_shadows_shader
 from ursina.lights import DirectionalLight
 from ursina import time
 
@@ -16,6 +14,7 @@ from utils import CUBES_PER_DIM
 from utils import iterate_cubes
 from utils import get_cubes_alive_arr
 from utils import update_cubes_alive_arr
+from utils import Cube
 
 import pyevolve
         
@@ -48,9 +47,7 @@ def init_cubes(cubes_per_dim):
 
             for z in z_range:
 
-                cube = Entity(model='cube', position=(x+0.5,y+0.5,z+0.5), 
-                color=color.orange, texture='white_cube', shader=lit_with_shadows_shader)
-                cube.enabled = False
+                cube = Cube(pos=(x+0.5,y+0.5,z+0.5))
                 z_row.append(cube)
 
             y_row.append(z_row)
@@ -85,7 +82,7 @@ def seed_cubes(cubes):
 
         enabled = np.random.rand() < 0.2
 
-        cube.enabled = enabled
+        cube.enable() if enabled else cube.disable()
 
 
 def evolve(cubes):

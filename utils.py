@@ -2,7 +2,37 @@ import itertools
 
 import numpy as np
 
-CUBES_PER_DIM = 30
+from ursina import Entity
+from ursina.shaders import lit_with_shadows_shader
+from ursina import color
+
+CUBES_PER_DIM = 10
+
+class Cube:
+
+    def __init__(self, pos):
+        self.entity = None
+        self.pos = pos
+
+    def enable(self):
+
+        if self.entity == None:
+            self.entity = Entity(model='cube', position=self.pos, 
+                color=color.orange, texture='white_cube', shader=lit_with_shadows_shader)
+
+        self.entity.enabled = True
+
+    def disable(self):
+
+        if self.entity != None:
+            self.entity.enabled = False
+
+    def is_enabled(self):
+
+        if self.entity != None:
+            return self.entity.enabled
+
+        return False
 
 # python implemention of the same functionality in CUDA
 
@@ -71,7 +101,7 @@ def get_cubes_alive_arr(cubes):
             
             z_arr = []
             for k, cube in enumerate(z_row):
-                z_arr.append(1 if cube.enabled else 0)
+                z_arr.append(1 if cube.is_enabled() else 0)
 
             y_arr.append(z_arr)
 
@@ -82,4 +112,7 @@ def get_cubes_alive_arr(cubes):
 def update_cubes_alive_arr(cubes, alive_arr):
 
     for cube, (i, j, k) in iterate_cubes(cubes):
-        cube.enabled = alive_arr[i,j,k] == 1
+
+        if alive_arr[i,j,k] == 1:
+            cube.enable()
+        else: cube.disable()
