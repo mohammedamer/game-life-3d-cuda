@@ -12,4 +12,4 @@
 .local/
 .rstudio/
 **/.idea
-
+**/.vscode
