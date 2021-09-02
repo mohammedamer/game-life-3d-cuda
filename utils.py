@@ -6,8 +6,6 @@ from ursina import Entity
 from ursina.shaders import lit_with_shadows_shader
 from ursina import color
 
-CUBES_PER_DIM = 10
-
 class Cube:
 
     def __init__(self, pos):
@@ -52,7 +50,7 @@ def should_live(alive_count, is_alive):
 
 # python implemention of the same functionality in CUDA
 
-def evolve(cubes):
+def evolve(cubes, cubes_per_dim):
 
     current_alive_arr = get_cubes_alive_arr(cubes)
     new_alive_arr = np.empty_like(current_alive_arr)
@@ -70,7 +68,7 @@ def evolve(cubes):
 
                 boundary = False
                 for coord in (_i, _j, _k): 
-                    if coord < 0 or coord > CUBES_PER_DIM-1:
+                    if coord < 0 or coord > cubes_per_dim-1:
                         boundary = True
 
                 if not boundary:

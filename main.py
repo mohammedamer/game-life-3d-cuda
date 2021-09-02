@@ -9,15 +9,14 @@ from ursina import window
 from ursina.lights import DirectionalLight
 from ursina import time
 
-from utils import CUBES_PER_DIM
-
 from utils import iterate_cubes
 from utils import get_cubes_alive_arr
 from utils import update_cubes_alive_arr
 from utils import Cube
 
 import pyevolve
-        
+
+CUBES_PER_DIM = 10
 
 def init_cubes(cubes_per_dim):
 
@@ -85,14 +84,14 @@ def seed_cubes(cubes):
         cube.enable() if enabled else cube.disable()
 
 
-def evolve(cubes):
+def evolve(cubes, cubes_per_dim):
 
     current_alive_arr = get_cubes_alive_arr(cubes).astype(np.int32).reshape(-1)
     new_alive_arr = np.empty_like(current_alive_arr)
 
-    pyevolve.pyevolve(current_alive_arr, new_alive_arr, np.int32(CUBES_PER_DIM))
+    pyevolve.pyevolve(current_alive_arr, new_alive_arr, np.int32(cubes_per_dim))
 
-    new_alive_arr = new_alive_arr.reshape((CUBES_PER_DIM,)*3)
+    new_alive_arr = new_alive_arr.reshape((cubes_per_dim,)*3)
 
     update_cubes_alive_arr(cubes, alive_arr=new_alive_arr)
 
@@ -103,7 +102,7 @@ def update():
     global delta_t
 
     if delta_t > 0.5:    
-        evolve(cubes)
+        evolve(cubes, cubes_per_dim=CUBES_PER_DIM)
         delta_t = 0
     else:
         delta_t += time.dt
