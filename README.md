@@ -4,6 +4,8 @@ This is an implementation of the 3D version of [Game of Life](https://en.wikiped
 
 The graphics is implemented using Python and [Ursina](https://www.ursinaengine.org/). The cell evolution is implemented as a CUDA kernel in CUDA C++. The kernel is called as a Python extension implemnted using [Cython](https://cython.org/).
 
+![gol-3d-cuda](images/gol-3d-cuda.gif)
+
 # Prerequisites
 
 - CUDA toolkit
