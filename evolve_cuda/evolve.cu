@@ -107,8 +107,8 @@ void evolve(int *cell_arr, int *out_arr, int n)
 
   num_elem = n*n*n;
 
-  cudaMallocManaged(&_in, num_elem*sizeof(float));
-  cudaMallocManaged(&_out, num_elem*sizeof(float));
+  cudaMallocManaged(&_in, num_elem*sizeof(int));
+  cudaMallocManaged(&_out, num_elem*sizeof(int));
 
   for (int i = 0; i < num_elem; i++) {
     _in[i] = cell_arr[i];
