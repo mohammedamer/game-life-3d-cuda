@@ -8,6 +8,7 @@ The graphics is implemented using Python and [Ursina](https://www.ursinaengine.o
 
 # Prerequisites
 
+- make
 - CUDA toolkit
 - Python 3.6
 
