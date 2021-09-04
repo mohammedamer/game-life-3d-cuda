@@ -14,9 +14,9 @@ struct index unravel_idx(int idx, int n){
 
   int x, y, z;
 
-  x = idx / (n*n);
-  y = (idx / n) % n;
   z = idx % n;
+  y = (idx / n) % n;
+  x = (idx / n) / n;
 
   unravel = {.x = x, .y = y, .z = z};
 
@@ -26,7 +26,7 @@ struct index unravel_idx(int idx, int n){
 
 __device__
 int ravel_idx(struct index idx, int n){
-  return idx.x+n*(idx.y + (idx.z*n));
+  return idx.x*n*n+idx.y*n + idx.z;
 }
 
 __device__
@@ -81,11 +81,16 @@ void evolve_kernel(int *cell_arr, int *out_arr, int n)
             _idx.y = adj_y[j];
             _idx.z = adj_z[k];
 
-            int adj_idx = ravel_idx(_idx, n);
+            if ((_idx.x > -1 && _idx.x < n) &&
+            (_idx.y > -1 && _idx.y < n) &&
+            (_idx.z > -1 && _idx.z < n)){
+              
+              int adj_idx = ravel_idx(_idx, n);
 
-            if (adj_idx != idx && adj_idx > 0 && adj_idx < num_elem ){
-              alive_count+=cell_arr[adj_idx];
-            } 
+              if (adj_idx != idx){
+                alive_count+=cell_arr[adj_idx];
+              } 
+            }
 
           }
         }
@@ -114,7 +119,10 @@ void evolve(int *cell_arr, int *out_arr, int n)
     _in[i] = cell_arr[i];
   }
 
-  evolve_kernel<<<16,256>>>(_in, _out, n);
+  int threadsPerBlock = 256;
+  int blocks = (num_elem+threadsPerBlock)/threadsPerBlock;
+
+  evolve_kernel<<<blocks,threadsPerBlock>>>(_in, _out, n);
 
   cudaDeviceSynchronize();
 
